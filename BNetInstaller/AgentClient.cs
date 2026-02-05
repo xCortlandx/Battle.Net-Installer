@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace BNetInstaller;
 
@@ -11,6 +13,7 @@ internal sealed class AgentClient : IDisposable
     {
         _client = new();
         _client.DefaultRequestHeaders.Add("User-Agent", "phoenix-agent/1.0");
+        _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         _client.BaseAddress = new($"http://127.0.0.1:{port}");
 
         _serializerOptions = new()
@@ -30,7 +33,7 @@ internal sealed class AgentClient : IDisposable
         var request = new HttpRequestMessage(method, endpoint);
 
         if (!string.IsNullOrEmpty(content))
-            request.Content = new StringContent(content);
+            request.Content = new StringContent(content, Encoding.UTF8, "application/json");
 
         var response = await _client.SendAsync(request);
 

@@ -16,7 +16,7 @@ internal abstract class AgentTask<T>(Options options)
 
     protected async Task<bool> PrintProgress(ProductEndpoint endpoint)
     {
-        var locale = _options.Locale.ToString();
+        var locale = _options.Locale.ToString().ToLowerInvariant();
         var cursor = (Left: 0, Top: 0);
 
         if (_options.Verbose)
